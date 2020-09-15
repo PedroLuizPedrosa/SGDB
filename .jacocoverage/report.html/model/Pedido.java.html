@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Pedido.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;SGDB&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">model</a> &gt; <span class="el_source">Pedido.java</span></div><h1>Pedido.java</h1><pre class="source lang-java linenums">package model;
+
+import dao.ClienteDAO;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class Pedido {
+
+    private int codPedido;
+    private String dataPedido;
+    private Cliente cliente;
+    private int codPessoa;
+
+<span class="fc" id="L15">    public Pedido() {</span>
+<span class="fc" id="L16">    }</span>
+
+<span class="nc" id="L18">    public Pedido(int codPedido, String dataPedido, Cliente cliente) {</span>
+<span class="nc" id="L19">        this.codPedido = codPedido;</span>
+<span class="nc" id="L20">        this.dataPedido = dataPedido;</span>
+<span class="nc" id="L21">        this.cliente = cliente;</span>
+<span class="nc" id="L22">    }</span>
+
+    public int getCodPedido() {
+<span class="nc" id="L25">        return codPedido;</span>
+    }
+
+    public void setCodPedido(int codPedido) {
+<span class="nc" id="L29">        this.codPedido = codPedido;</span>
+<span class="nc" id="L30">    }</span>
+
+    public String getDataPedido() {
+<span class="nc" id="L33">        return dataPedido;</span>
+    }
+
+    public void setDataPedido(String dataPedido) {
+<span class="nc" id="L37">        this.dataPedido = dataPedido;</span>
+<span class="nc" id="L38">    }</span>
+
+    public Cliente getCliente() {
+<span class="pc bpc" id="L41" title="3 of 4 branches missed.">        if ((cliente == null) &amp;&amp; (codPessoa != 0)) {</span>
+            try {
+<span class="nc" id="L43">                cliente = ClienteDAO.obterCliente(codPessoa);</span>
+<span class="nc" id="L44">            } catch (ClassNotFoundException ex) {</span>
+<span class="nc" id="L45">                Logger.getLogger(Funcionario.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L46">            } catch (SQLException ex) {</span>
+<span class="nc" id="L47">                Logger.getLogger(Funcionario.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L48">            }</span>
+        }
+<span class="fc" id="L50">        return cliente;</span>
+    }
+
+    public void setCliente(Cliente cliente) {
+<span class="fc" id="L54">        this.cliente = cliente;</span>
+<span class="fc" id="L55">    }</span>
+    
+    public int getCodPessoa() {
+<span class="nc" id="L58">        return codPessoa;</span>
+    }
+
+    public void setCodPessoa(int codPessoa) {
+<span class="nc" id="L62">        this.codPessoa = codPessoa;</span>
+<span class="nc" id="L63">    }</span>
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

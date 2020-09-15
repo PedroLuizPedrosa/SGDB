@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ProdutoDAO.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;SGDB&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">dao</a> &gt; <span class="el_source">ProdutoDAO.java</span></div><h1>ProdutoDAO.java</h1><pre class="source lang-java linenums">package dao;
+
+import static dao.DAO.fecharConexao;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
+import model.Produto;
+
+<span class="nc" id="L14">public class ProdutoDAO {</span>
+
+    public static List&lt;Produto&gt; obterProdutos() throws ClassNotFoundException, SQLException {
+<span class="nc" id="L17">        Connection conexao = null;</span>
+<span class="nc" id="L18">        Statement comando = null;</span>
+<span class="nc" id="L19">        List&lt;Produto&gt; produtos = new ArrayList&lt;Produto&gt;();</span>
+<span class="nc" id="L20">        Produto produto = null;</span>
+        try {
+<span class="nc" id="L22">            conexao = BD.getConexao();</span>
+<span class="nc" id="L23">            comando = conexao.createStatement();</span>
+<span class="nc" id="L24">            ResultSet rs = comando.executeQuery(&quot;select * from produto&quot;);</span>
+<span class="nc bnc" id="L25" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L26">                produto = instanciarProduto(rs);</span>
+<span class="nc" id="L27">                produtos.add(produto);</span>
+            }
+        } finally {
+<span class="nc" id="L30">            fecharConexao(conexao, comando);</span>
+<span class="nc" id="L31">        }</span>
+<span class="nc" id="L32">        return produtos;</span>
+    }
+
+    public static Produto obterProduto(int codProduto) throws ClassNotFoundException, SQLException {
+<span class="nc" id="L36">        Connection conexao = null;</span>
+<span class="nc" id="L37">        Statement comando = null;</span>
+<span class="nc" id="L38">        Produto produto = null;</span>
+        try {
+<span class="nc" id="L40">            conexao = BD.getConexao();</span>
+<span class="nc" id="L41">            comando = conexao.createStatement();</span>
+<span class="nc" id="L42">            ResultSet rs = comando.executeQuery(&quot;select * from produto where codProduto = &quot; + codProduto);</span>
+<span class="nc" id="L43">            rs.first();</span>
+<span class="nc" id="L44">            produto = instanciarProduto(rs);</span>
+        } finally {
+<span class="nc" id="L46">            fecharConexao(conexao, comando);</span>
+<span class="nc" id="L47">        }</span>
+<span class="nc" id="L48">        return produto;</span>
+    }
+
+    public static Produto instanciarProduto(ResultSet rs) throws SQLException {
+<span class="nc" id="L52">        Produto produto = new Produto(rs.getInt(&quot;codProduto&quot;),</span>
+<span class="nc" id="L53">                rs.getString(&quot;nomeProduto&quot;),</span>
+<span class="nc" id="L54">                rs.getInt(&quot;qntdProdutoEstoque&quot;),</span>
+<span class="nc" id="L55">                rs.getFloat(&quot;precoProduto&quot;),</span>
+<span class="nc" id="L56">                rs.getString(&quot;descricao&quot;),</span>
+                null);
+<span class="nc" id="L58">        produto.setCodTipoProduto(rs.getInt(&quot;TipoProduto_codTipoProduto&quot;));</span>
+<span class="nc" id="L59">        return produto;</span>
+    }
+
+    public static void gravar(Produto produto) throws SQLException, ClassNotFoundException {
+
+<span class="nc" id="L64">        Connection conexao = null;</span>
+<span class="nc" id="L65">        PreparedStatement comando = null;</span>
+
+        try {
+<span class="nc" id="L68">            conexao = BD.getConexao();</span>
+<span class="nc" id="L69">            comando = conexao.prepareStatement(&quot;insert into produto (codProduto, nomeProduto, qntdProdutoEstoque,&quot;</span>
+                    + &quot;precoProduto, descricao, TipoProduto_codTipoProduto) values (?,?,?,?,?,?)&quot;);
+<span class="nc" id="L71">            comando.setInt(1, produto.getCodProduto());</span>
+<span class="nc" id="L72">            comando.setString(2, produto.getNomeProduto());</span>
+<span class="nc" id="L73">            comando.setInt(3, produto.getQntdProdutoEstoque());</span>
+<span class="nc" id="L74">            comando.setFloat(4, produto.getPrecoProduto());</span>
+<span class="nc" id="L75">            comando.setString(5, produto.getDescricao());</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">            if (produto.getTipoProduto() == null) {</span>
+<span class="nc" id="L77">                comando.setNull(6, Types.INTEGER);</span>
+            } else {
+<span class="nc" id="L79">                comando.setInt(6, produto.getTipoProduto().getCodTipoProduto());</span>
+            }
+<span class="nc" id="L81">            comando.executeUpdate();</span>
+        } finally {
+<span class="nc" id="L83">            fecharConexao(conexao, comando);</span>
+<span class="nc" id="L84">        }</span>
+<span class="nc" id="L85">    }</span>
+
+    public static void excluir(Produto produto) throws SQLException, ClassNotFoundException {
+<span class="nc" id="L88">        Connection conexao = null;</span>
+<span class="nc" id="L89">        Statement comando = null;</span>
+        String stringSQL;
+        try {
+<span class="nc" id="L92">            conexao = BD.getConexao();</span>
+<span class="nc" id="L93">            comando = conexao.createStatement();</span>
+<span class="nc" id="L94">            stringSQL = &quot;delete from produto where codProduto = &quot; + produto.getCodProduto();</span>
+<span class="nc" id="L95">            comando.execute(stringSQL);</span>
+        } finally {
+<span class="nc" id="L97">            fecharConexao(conexao, comando);</span>
+<span class="nc" id="L98">        }</span>
+<span class="nc" id="L99">    }</span>
+
+    public static void alterar(Produto produto) throws SQLException, ClassNotFoundException {
+
+<span class="nc" id="L103">        Connection conexao = null;</span>
+<span class="nc" id="L104">        Statement comando = null;</span>
+        String stringSQL;
+        try {
+<span class="nc" id="L107">            conexao = BD.getConexao();</span>
+<span class="nc" id="L108">            comando = conexao.createStatement();</span>
+<span class="nc" id="L109">            stringSQL = &quot;update produto set &quot;</span>
+<span class="nc" id="L110">                    + &quot;nomeProduto = '&quot; + produto.getNomeProduto() + &quot;',&quot;</span>
+<span class="nc" id="L111">                    + &quot;qntdProdutoEstoque = &quot; + produto.getQntdProdutoEstoque() + &quot;,&quot;</span>
+<span class="nc" id="L112">                    + &quot;precoProduto = &quot; + produto.getPrecoProduto() + &quot;,&quot;</span>
+<span class="nc" id="L113">                    + &quot;descricao = '&quot; + produto.getDescricao() + &quot;',&quot;</span>
+                    + &quot;TipoProduto_codTipoProduto = &quot;;            
+<span class="nc bnc" id="L115" title="All 2 branches missed.">            if (produto.getTipoProduto() == null) {</span>
+<span class="nc" id="L116">                stringSQL = stringSQL + &quot;null&quot;;</span>
+            } else {
+<span class="nc" id="L118">                stringSQL = stringSQL + produto.getTipoProduto().getCodTipoProduto();</span>
+            }
+<span class="nc" id="L120">            stringSQL = stringSQL + &quot; where codProduto = &quot; + produto.getCodProduto();</span>
+<span class="nc" id="L121">            comando.execute(stringSQL);</span>
+        } finally {
+<span class="nc" id="L123">            fecharConexao(conexao, comando);</span>
+<span class="nc" id="L124">        }</span>
+<span class="nc" id="L125">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

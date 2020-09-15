@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Pessoa.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;SGDB&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">model</a> &gt; <span class="el_source">Pessoa.java</span></div><h1>Pessoa.java</h1><pre class="source lang-java linenums">package model;
+
+import java.util.Date;
+
+public class Pessoa {
+
+    private int codPessoa;
+    private String nome;
+    private String dataNasc;
+    private String sexo;
+    private String cpf;
+    private String rg;
+    private String telefone;
+    private String celular;
+    private String email;
+    private String cep;
+    private String logradouro;
+    private int numero;
+    private String complemento;
+    private String bairro;
+    private String cidade;
+    private String estado;
+
+<span class="fc" id="L24">    public Pessoa() {</span>
+<span class="fc" id="L25">    }</span>
+
+<span class="nc" id="L27">    public Pessoa(int codPessoa, String nome, String dataNasc, String sexo, String cpf, String rg, String telefone, String celular, String email, String cep, String logradouro, int numero, String complemento, String bairro, String cidade, String estado) {</span>
+<span class="nc" id="L28">        this.codPessoa = codPessoa;</span>
+<span class="nc" id="L29">        this.nome = nome;</span>
+<span class="nc" id="L30">        this.dataNasc = dataNasc;</span>
+<span class="nc" id="L31">        this.sexo = sexo;</span>
+<span class="nc" id="L32">        this.cpf = cpf;</span>
+<span class="nc" id="L33">        this.rg = rg;</span>
+<span class="nc" id="L34">        this.telefone = telefone;</span>
+<span class="nc" id="L35">        this.celular = celular;</span>
+<span class="nc" id="L36">        this.email = email;</span>
+<span class="nc" id="L37">        this.cep = cep;</span>
+<span class="nc" id="L38">        this.logradouro = logradouro;</span>
+<span class="nc" id="L39">        this.numero = numero;</span>
+<span class="nc" id="L40">        this.complemento = complemento;</span>
+<span class="nc" id="L41">        this.bairro = bairro;</span>
+<span class="nc" id="L42">        this.cidade = cidade;</span>
+<span class="nc" id="L43">        this.estado = estado;</span>
+<span class="nc" id="L44">    }</span>
+
+    public int getCodPessoa() {
+<span class="nc" id="L47">        return codPessoa;</span>
+    }
+
+    public void setCodPessoa(int codPessoa) {
+<span class="nc" id="L51">        this.codPessoa = codPessoa;</span>
+<span class="nc" id="L52">    }</span>
+
+    public String getNome() {
+<span class="nc" id="L55">        return nome;</span>
+    }
+
+    public void setNome(String nome) {
+<span class="nc" id="L59">        this.nome = nome;</span>
+<span class="nc" id="L60">    }</span>
+
+    public String getDataNasc() {
+<span class="nc" id="L63">        return dataNasc;</span>
+    }
+
+    public void setDataNasc(String dataNasc) {
+<span class="nc" id="L67">        this.dataNasc = dataNasc;</span>
+<span class="nc" id="L68">    }</span>
+
+    public String getSexo() {
+<span class="nc" id="L71">        return sexo;</span>
+    }
+
+    public void setSexo(String sexo) {
+<span class="nc" id="L75">        this.sexo = sexo;</span>
+<span class="nc" id="L76">    }</span>
+
+    public String getCpf() {
+<span class="nc" id="L79">        return cpf;</span>
+    }
+
+    public void setCpf(String cpf) {
+<span class="nc" id="L83">        this.cpf = cpf;</span>
+<span class="nc" id="L84">    }</span>
+
+    public String getRg() {
+<span class="nc" id="L87">        return rg;</span>
+    }
+
+    public void setRg(String rg) {
+<span class="nc" id="L91">        this.rg = rg;</span>
+<span class="nc" id="L92">    }</span>
+
+    public String getTelefone() {
+<span class="nc" id="L95">        return telefone;</span>
+    }
+
+    public void setTelefone(String telefone) {
+<span class="nc" id="L99">        this.telefone = telefone;</span>
+<span class="nc" id="L100">    }</span>
+
+    public String getCelular() {
+<span class="nc" id="L103">        return celular;</span>
+    }
+
+    public void setCelular(String celular) {
+<span class="nc" id="L107">        this.celular = celular;</span>
+<span class="nc" id="L108">    }</span>
+
+    public String getEmail() {
+<span class="nc" id="L111">        return email;</span>
+    }
+
+    public void setEmail(String email) {
+<span class="nc" id="L115">        this.email = email;</span>
+<span class="nc" id="L116">    }</span>
+
+    public String getCep() {
+<span class="nc" id="L119">        return cep;</span>
+    }
+
+    public void setCep(String cep) {
+<span class="nc" id="L123">        this.cep = cep;</span>
+<span class="nc" id="L124">    }</span>
+
+    public String getLogradouro() {
+<span class="nc" id="L127">        return logradouro;</span>
+    }
+
+    public void setLogradouro(String logradouro) {
+<span class="nc" id="L131">        this.logradouro = logradouro;</span>
+<span class="nc" id="L132">    }</span>
+
+    public int getNumero() {
+<span class="nc" id="L135">        return numero;</span>
+    }
+
+    public void setNumero(int numero) {
+<span class="nc" id="L139">        this.numero = numero;</span>
+<span class="nc" id="L140">    }</span>
+
+    public String getComplemento() {
+<span class="nc" id="L143">        return complemento;</span>
+    }
+
+    public void setComplemento(String complemento) {
+<span class="nc" id="L147">        this.complemento = complemento;</span>
+<span class="nc" id="L148">    }</span>
+
+    public String getBairro() {
+<span class="nc" id="L151">        return bairro;</span>
+    }
+
+    public void setBairro(String bairro) {
+<span class="nc" id="L155">        this.bairro = bairro;</span>
+<span class="nc" id="L156">    }</span>
+
+    public String getCidade() {
+<span class="nc" id="L159">        return cidade;</span>
+    }
+
+    public void setCidade(String cidade) {
+<span class="nc" id="L163">        this.cidade = cidade;</span>
+<span class="nc" id="L164">    }</span>
+
+    public String getEstado() {
+<span class="nc" id="L167">        return estado;</span>
+    }
+
+    public void setEstado(String estado) {
+<span class="nc" id="L171">        this.estado = estado;</span>
+<span class="nc" id="L172">    }</span>
+
+   
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

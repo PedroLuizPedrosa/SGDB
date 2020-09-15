@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ItemPedidoDAO.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;SGDB&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">dao</a> &gt; <span class="el_source">ItemPedidoDAO.java</span></div><h1>ItemPedidoDAO.java</h1><pre class="source lang-java linenums">package dao;
+
+import static dao.DAO.fecharConexao;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
+import model.ItemPedido;
+
+<span class="nc" id="L14">public class ItemPedidoDAO {</span>
+
+    public static List&lt;ItemPedido&gt; obterItensPedidos() throws ClassNotFoundException, SQLException {
+<span class="nc" id="L17">        Connection conexao = null;</span>
+<span class="nc" id="L18">        Statement comando = null;</span>
+<span class="nc" id="L19">        List&lt;ItemPedido&gt; itensPedidos = new ArrayList&lt;ItemPedido&gt;();</span>
+<span class="nc" id="L20">        ItemPedido itemPedido = null;</span>
+        try {
+<span class="nc" id="L22">            conexao = BD.getConexao();</span>
+<span class="nc" id="L23">            comando = conexao.createStatement();</span>
+<span class="nc" id="L24">            ResultSet rs = comando.executeQuery(&quot;select * from itemPedido&quot;);</span>
+<span class="nc bnc" id="L25" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L26">                itemPedido = instanciarItemPedido(rs);</span>
+<span class="nc" id="L27">                itensPedidos.add(itemPedido);</span>
+            }
+        } finally {
+<span class="nc" id="L30">            fecharConexao(conexao, comando);</span>
+<span class="nc" id="L31">        }</span>
+<span class="nc" id="L32">        return itensPedidos;</span>
+    }
+
+    public static ItemPedido obterItemPedido(int codItemPedido) throws ClassNotFoundException, SQLException {
+<span class="nc" id="L36">        Connection conexao = null;</span>
+<span class="nc" id="L37">        Statement comando = null;</span>
+<span class="nc" id="L38">        ItemPedido itemPedido = null;</span>
+        try {
+<span class="nc" id="L40">            conexao = BD.getConexao();</span>
+<span class="nc" id="L41">            comando = conexao.createStatement();</span>
+<span class="nc" id="L42">            ResultSet rs = comando.executeQuery(&quot;select * from itemPedido where codItemPedido = &quot; + codItemPedido);</span>
+<span class="nc" id="L43">            rs.first();</span>
+<span class="nc" id="L44">            itemPedido = instanciarItemPedido(rs);</span>
+        } finally {
+<span class="nc" id="L46">            fecharConexao(conexao, comando);</span>
+<span class="nc" id="L47">        }</span>
+<span class="nc" id="L48">        return itemPedido;</span>
+    }
+
+    public static ItemPedido instanciarItemPedido(ResultSet rs) throws SQLException {
+<span class="nc" id="L52">        ItemPedido itemPedido = new ItemPedido(rs.getInt(&quot;codItemPedido&quot;),</span>
+<span class="nc" id="L53">                rs.getInt(&quot;qntdProdutoPedido&quot;),</span>
+                null,
+                null);
+<span class="nc" id="L56">        itemPedido.setCodProduto(rs.getInt(&quot;Produto_codProduto&quot;));</span>
+<span class="nc" id="L57">        itemPedido.setCodPedido(rs.getInt(&quot;Pedido_codPedido&quot;));</span>
+<span class="nc" id="L58">        return itemPedido;</span>
+    }
+
+    public static void gravar(ItemPedido itemPedido) throws SQLException, ClassNotFoundException {
+
+<span class="nc" id="L63">        Connection conexao = null;</span>
+<span class="nc" id="L64">        PreparedStatement comando = null;</span>
+
+        try {
+<span class="nc" id="L67">            conexao = BD.getConexao();</span>
+<span class="nc" id="L68">            comando = conexao.prepareStatement(&quot;insert into itempedido (codItemPedido, qntdProdutoPedido, Pedido_codPedido, Produto_codProduto) values (?,?,?,?)&quot;);</span>
+<span class="nc" id="L69">            comando.setInt(1, itemPedido.getCodItemPedido());</span>
+<span class="nc" id="L70">            comando.setInt(2, itemPedido.getQntdProdutoPedido());</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">            if (itemPedido.getPedido() == null) {</span>
+<span class="nc" id="L72">                comando.setNull(3, Types.INTEGER);</span>
+            } else {
+<span class="nc" id="L74">                comando.setInt(3, itemPedido.getPedido().getCodPedido());</span>
+            }
+<span class="nc bnc" id="L76" title="All 2 branches missed.">            if (itemPedido.getProduto() == null) {</span>
+<span class="nc" id="L77">                comando.setNull(4, Types.INTEGER);</span>
+            } else {
+<span class="nc" id="L79">                comando.setInt(4, itemPedido.getProduto().getCodProduto());</span>
+            }
+<span class="nc" id="L81">            comando.executeUpdate();</span>
+        } finally {
+<span class="nc" id="L83">            fecharConexao(conexao, comando);</span>
+<span class="nc" id="L84">        }</span>
+<span class="nc" id="L85">    }</span>
+
+    public static void excluir(ItemPedido itemPedido) throws SQLException, ClassNotFoundException {
+<span class="nc" id="L88">        Connection conexao = null;</span>
+<span class="nc" id="L89">        Statement comando = null;</span>
+        String stringSQL;
+
+        try {
+<span class="nc" id="L93">            conexao = BD.getConexao();</span>
+<span class="nc" id="L94">            comando = conexao.createStatement();</span>
+<span class="nc" id="L95">            stringSQL = &quot;delete from itempedido where codItemPedido = &quot; + itemPedido.getCodItemPedido();</span>
+<span class="nc" id="L96">            comando.execute(stringSQL);</span>
+        } finally {
+<span class="nc" id="L98">            fecharConexao(conexao, comando);</span>
+<span class="nc" id="L99">        }</span>
+<span class="nc" id="L100">    }</span>
+
+    public static void alterar(ItemPedido itemPedido) throws SQLException, ClassNotFoundException {
+
+<span class="nc" id="L104">        Connection conexao = null;</span>
+<span class="nc" id="L105">        Statement comando = null;</span>
+        String stringSQL;
+        try {
+<span class="nc" id="L108">            conexao = BD.getConexao();</span>
+<span class="nc" id="L109">            comando = conexao.createStatement();</span>
+<span class="nc" id="L110">            stringSQL = &quot;update itemPedido set &quot;</span>
+<span class="nc" id="L111">                    + &quot;qntdProdutoPedido = &quot; + itemPedido.getQntdProdutoPedido() + &quot;, &quot;</span>
+                    + &quot;Pedido_codPedido = &quot;;
+<span class="nc bnc" id="L113" title="All 2 branches missed.">            if (itemPedido.getPedido() == null) {</span>
+<span class="nc" id="L114">                stringSQL = stringSQL + &quot;null&quot;;</span>
+            } else {
+<span class="nc" id="L116">                stringSQL = stringSQL + itemPedido.getPedido().getCodPedido();</span>
+            }
+<span class="nc" id="L118">            stringSQL = stringSQL + &quot;, Produto_codProduto = &quot;;</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">            if (itemPedido.getProduto()== null) {</span>
+<span class="nc" id="L120">                stringSQL = stringSQL + &quot;null&quot;;</span>
+            } else {
+<span class="nc" id="L122">                stringSQL = stringSQL + itemPedido.getProduto().getCodProduto();</span>
+            }
+<span class="nc" id="L124">            stringSQL = stringSQL + &quot; where codItemPedido = &quot; + itemPedido.getCodItemPedido();</span>
+<span class="nc" id="L125">            comando.execute(stringSQL);</span>
+        } finally {
+<span class="nc" id="L127">            fecharConexao(conexao, comando);</span>
+<span class="nc" id="L128">        }</span>
+<span class="nc" id="L129">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

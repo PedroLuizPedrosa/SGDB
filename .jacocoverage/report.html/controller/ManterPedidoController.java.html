@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ManterPedidoController.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;SGDB&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">controller</a> &gt; <span class="el_source">ManterPedidoController.java</span></div><h1>ManterPedidoController.java</h1><pre class="source lang-java linenums">package controller;
+
+import dao.ClienteDAO;
+import dao.PedidoDAO;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import model.Cliente;
+import model.Pedido;
+
+<span class="nc" id="L17">public class ManterPedidoController extends HttpServlet {</span>
+
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+<span class="nc" id="L21">        String acao = request.getParameter(&quot;acao&quot;);</span>
+<span class="nc bnc" id="L22" title="All 2 branches missed.">        if (acao.equals(&quot;prepararOperacao&quot;)) {</span>
+<span class="nc" id="L23">            prepararOperacao(request, response);</span>
+<span class="nc bnc" id="L24" title="All 2 branches missed.">        } else if (acao.equals(&quot;confirmarOperacao&quot;)) {</span>
+<span class="nc" id="L25">            confirmarOperacao(request, response);</span>
+        }
+<span class="nc" id="L27">    }</span>
+
+    public void prepararOperacao(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, SQLException {
+        try {
+<span class="nc" id="L32">            String operacao = request.getParameter(&quot;operacao&quot;);</span>
+<span class="nc" id="L33">            request.setAttribute(&quot;operacao&quot;, operacao);</span>
+<span class="nc" id="L34">            request.setAttribute(&quot;clientes&quot;, ClienteDAO.obterClientes());</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">            if (!operacao.equals(&quot;Incluir&quot;)) {</span>
+<span class="nc" id="L36">                int codPedido = Integer.parseInt(request.getParameter(&quot;codPedido&quot;));</span>
+<span class="nc" id="L37">                Pedido pedido = PedidoDAO.obterPedido(codPedido);</span>
+<span class="nc" id="L38">                request.setAttribute(&quot;pedido&quot;, pedido);</span>
+            }
+<span class="nc" id="L40">            RequestDispatcher view = request.getRequestDispatcher(&quot;/cadastroPedido.jsp&quot;);</span>
+<span class="nc" id="L41">            view.forward(request, response);</span>
+<span class="nc" id="L42">        } catch (ServletException e) {</span>
+<span class="nc" id="L43">            throw e;</span>
+<span class="nc" id="L44">        } catch (IOException e) {</span>
+<span class="nc" id="L45">            throw new ServletException(e);</span>
+<span class="nc" id="L46">        } catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L47">            throw new ServletException(e);</span>
+<span class="nc" id="L48">        }</span>
+<span class="nc" id="L49">    }</span>
+
+    public void confirmarOperacao(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        try {
+<span class="nc" id="L54">            String operacao = request.getParameter(&quot;operacao&quot;);</span>
+<span class="nc" id="L55">            int codPedido = Integer.parseInt(request.getParameter(&quot;txtCodPedido&quot;));</span>
+<span class="nc" id="L56">            String dataPedido = request.getParameter(&quot;txtDataPedido&quot;);</span>
+<span class="nc" id="L57">            Cliente cliente = null;</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">            if (!operacao.equals(&quot;Excluir&quot;)) {</span>
+<span class="nc" id="L59">                int codPessoa = Integer.parseInt(request.getParameter(&quot;txtCodPessoa&quot;));</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">                if (codPessoa != 0) {</span>
+<span class="nc" id="L61">                    cliente = ClienteDAO.obterCliente(codPessoa);</span>
+                }
+            }
+<span class="nc" id="L64">            Pedido pedido = new Pedido(codPedido, dataPedido, cliente);</span>
+
+<span class="nc bnc" id="L66" title="All 2 branches missed.">            if (operacao.equals(&quot;Incluir&quot;)) {</span>
+<span class="nc" id="L67">                PedidoDAO.gravar(pedido);</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">            } else if (operacao.equals(&quot;Excluir&quot;)) {</span>
+<span class="nc" id="L69">                PedidoDAO.excluir(pedido);</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">            } else if (operacao.equals(&quot;Editar&quot;)) {</span>
+<span class="nc" id="L71">                PedidoDAO.alterar(pedido);</span>
+            }
+<span class="nc" id="L73">            RequestDispatcher view = request.getRequestDispatcher(&quot;PesquisaPedidoController&quot;);</span>
+<span class="nc" id="L74">            view.forward(request, response);</span>
+<span class="nc" id="L75">        } catch (IOException e) {</span>
+<span class="nc" id="L76">            throw new ServletException(e);</span>
+<span class="nc" id="L77">        } catch (SQLException e) {</span>
+<span class="nc" id="L78">            throw new ServletException(e);</span>
+<span class="nc" id="L79">        } catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L80">            throw new ServletException(e);</span>
+<span class="nc" id="L81">        } catch (ServletException e) {</span>
+<span class="nc" id="L82">            throw e;</span>
+<span class="nc" id="L83">        }</span>
+<span class="nc" id="L84">    }</span>
+
+    // &lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;HttpServlet methods. Click on the + sign on the left to edit the code.&quot;&gt;
+    /**
+     * Handles the HTTP &lt;code&gt;GET&lt;/code&gt; method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+<span class="nc" id="L99">            processRequest(request, response);</span>
+<span class="nc" id="L100">        } catch (SQLException ex) {</span>
+<span class="nc" id="L101">            Logger.getLogger(ManterPedidoController.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L102">        }</span>
+<span class="nc" id="L103">    }</span>
+
+    /**
+     * Handles the HTTP &lt;code&gt;POST&lt;/code&gt; method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+<span class="nc" id="L117">            processRequest(request, response);</span>
+<span class="nc" id="L118">        } catch (SQLException ex) {</span>
+<span class="nc" id="L119">            Logger.getLogger(ManterPedidoController.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L120">        }</span>
+<span class="nc" id="L121">    }</span>
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+<span class="nc" id="L130">        return &quot;Short description&quot;;</span>
+    }// &lt;/editor-fold&gt;
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

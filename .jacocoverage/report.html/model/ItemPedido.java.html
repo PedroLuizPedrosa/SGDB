@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ItemPedido.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;SGDB&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">model</a> &gt; <span class="el_source">ItemPedido.java</span></div><h1>ItemPedido.java</h1><pre class="source lang-java linenums">package model;
+
+import dao.PedidoDAO;
+import dao.ProdutoDAO;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class ItemPedido {
+
+    private int codItemPedido;
+    private int qntdProdutoPedido;
+    public Pedido pedido;
+    private Produto produto;
+    private int codProduto;
+    private int codPedido;
+
+<span class="fc" id="L18">    public ItemPedido() {</span>
+<span class="fc" id="L19">    }</span>
+
+<span class="nc" id="L21">    public ItemPedido(int codItemPedido, int qntdProdutoPedido, Pedido pedido, Produto produto) {</span>
+<span class="nc" id="L22">        this.codItemPedido = codItemPedido;</span>
+<span class="nc" id="L23">        this.qntdProdutoPedido = qntdProdutoPedido;</span>
+<span class="nc" id="L24">        this.pedido = pedido;</span>
+<span class="nc" id="L25">        this.produto = produto;</span>
+<span class="nc" id="L26">    }</span>
+
+    public int getCodItemPedido() {
+<span class="nc" id="L29">        return codItemPedido;</span>
+    }
+
+    public void setCodItemPedido(int codItemPedido) {
+<span class="nc" id="L33">        this.codItemPedido = codItemPedido;</span>
+<span class="nc" id="L34">    }</span>
+
+    public int getQntdProdutoPedido() {
+<span class="fc" id="L37">        return qntdProdutoPedido;</span>
+    }
+
+    public void setQntdProdutoPedido(int qntdProdutoPedido) {
+<span class="fc" id="L41">        this.qntdProdutoPedido = qntdProdutoPedido;</span>
+<span class="fc" id="L42">    }</span>
+
+    public Pedido getPedido() {
+<span class="nc bnc" id="L45" title="All 4 branches missed.">        if ((pedido == null) &amp;&amp; (codPedido != 0)) {</span>
+            try {
+<span class="nc" id="L47">                pedido = PedidoDAO.obterPedido(codPedido);</span>
+<span class="nc" id="L48">            } catch (ClassNotFoundException ex) {</span>
+<span class="nc" id="L49">                Logger.getLogger(Funcionario.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L50">            } catch (SQLException ex) {</span>
+<span class="nc" id="L51">                Logger.getLogger(Funcionario.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L52">            }</span>
+        }
+<span class="nc" id="L54">        return pedido;</span>
+    }
+
+    public void setPedido(Pedido pedido) {
+<span class="fc" id="L58">        this.pedido = pedido;</span>
+<span class="fc" id="L59">    }</span>
+
+    public Produto getProduto() {
+<span class="nc bnc" id="L62" title="All 4 branches missed.">        if ((produto == null) &amp;&amp; (codProduto != 0)) {</span>
+            try {
+<span class="nc" id="L64">                produto = ProdutoDAO.obterProduto(codProduto);</span>
+<span class="nc" id="L65">            } catch (ClassNotFoundException ex) {</span>
+<span class="nc" id="L66">                Logger.getLogger(Funcionario.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L67">            } catch (SQLException ex) {</span>
+<span class="nc" id="L68">                Logger.getLogger(Funcionario.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L69">            }</span>
+        }
+<span class="nc" id="L71">        return produto;</span>
+    }
+
+    public void setProduto(Produto produto) {
+<span class="fc" id="L75">        this.produto = produto;</span>
+<span class="fc" id="L76">    }</span>
+
+    public int getCodProduto() {
+<span class="nc" id="L79">        return codProduto;</span>
+    }
+
+    public void setCodProduto(int codProduto) {
+<span class="nc" id="L83">        this.codProduto = codProduto;</span>
+<span class="nc" id="L84">    }</span>
+
+    public int getCodPedido() {
+<span class="nc" id="L87">        return codPedido;</span>
+    }
+
+    public void setCodPedido(int codPedido) {
+<span class="nc" id="L91">        this.codPedido = codPedido;</span>
+<span class="nc" id="L92">    }</span>
+
+    public float calculaTotal() {
+        float total;
+<span class="fc" id="L96">        total = this.getQntdProdutoPedido() * produto.getPrecoProduto();</span>
+<span class="fc" id="L97">        return total;</span>
+    }
+
+    public float calculaDesconto() {
+        float calcDesc;
+<span class="nc" id="L102">        int categoriaCliDesc = pedido.getCliente().getTipoCliente().getAplicarDesconto();</span>
+<span class="nc" id="L103">        calcDesc = calculaTotal() - ((calculaTotal() * categoriaCliDesc) / 100);</span>
+<span class="nc" id="L104">        return calcDesc;</span>
+    }
+
+    public float desconto() {
+
+        float calcDesc;
+<span class="fc" id="L110">        String categoriaCliente = pedido.getCliente().getTipoCliente().getDescricao();</span>
+<span class="fc" id="L111">        int categoriaCliDesc = pedido.getCliente().getTipoCliente().getAplicarDesconto();</span>
+<span class="fc" id="L112">        float valor = 200;</span>
+<span class="fc" id="L113">        float totalCompra = calculaTotal();</span>
+
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (&quot;VIP&quot;.equals(categoriaCliente)) {</span>
+<span class="fc" id="L116">            calcDesc = totalCompra - ((totalCompra * categoriaCliDesc) / 100);</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">            if (totalCompra &gt;= 5 * valor) {</span>
+<span class="fc" id="L118">                calcDesc = (calcDesc - (totalCompra * 10) / 100);</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">            } else if (totalCompra &gt;= 3 * valor) {</span>
+<span class="fc" id="L120">                calcDesc = ( calcDesc - (totalCompra * 6) / 100);</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">            } else if (totalCompra &gt; 0){</span>
+<span class="fc" id="L122">                calcDesc = (calcDesc - (totalCompra * 2) / 100);</span>
+            }
+<span class="fc" id="L124">            return calcDesc;</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">        } else if (&quot;FREQUENTE&quot;.equals(categoriaCliente)) {</span>
+<span class="fc" id="L126">            calcDesc = totalCompra - ((totalCompra * categoriaCliDesc) / 100);</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">            if (totalCompra &gt;= 5 * valor) {</span>
+<span class="fc" id="L128">                calcDesc = (calcDesc - (totalCompra * 8) / 100);</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">            } else if (totalCompra &gt;= 4 * valor) {</span>
+<span class="fc" id="L130">                calcDesc = (calcDesc - (totalCompra * 4) / 100);</span>
+            }
+<span class="fc" id="L132">            return calcDesc;</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">        } else if (&quot;MODERADO&quot;.equals(categoriaCliente)) {</span>
+<span class="fc" id="L134">            calcDesc = totalCompra - ((totalCompra * categoriaCliDesc) / 100);</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">            if (calculaTotal() &gt;= 6 * valor) {</span>
+<span class="fc" id="L136">                calcDesc = (calcDesc - (totalCompra * 6) / 100);</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">            } else if (calculaTotal() &gt;= 4 * valor) {</span>
+<span class="fc" id="L138">                calcDesc = (calcDesc - (totalCompra * 3) / 100);</span>
+            }
+<span class="fc" id="L140">            return calcDesc;</span>
+<span class="fc bfc" id="L141" title="All 2 branches covered.">        } else if (&quot;INICIANTE&quot;.equals(categoriaCliente)) {</span>
+<span class="fc" id="L142">            calcDesc = totalCompra - ((totalCompra * categoriaCliDesc) / 100);</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">            if (calculaTotal() &gt;= 7 * valor) {</span>
+<span class="fc" id="L144">                calcDesc = (calcDesc - (totalCompra * 5) / 100);</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">            } else if (calculaTotal() &gt;= 5 * valor) {</span>
+<span class="fc" id="L146">                calcDesc = (calcDesc - (totalCompra * 2) / 100);</span>
+            }
+<span class="fc" id="L148">            return calcDesc;</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        } else if (calculaTotal() &gt;= valor * 10) {</span>
+<span class="fc" id="L150">            calcDesc = totalCompra - ((totalCompra * 10) / 100);</span>
+<span class="fc" id="L151">            return calcDesc;</span>
+        } else {
+<span class="fc" id="L153">            return calcDesc = totalCompra;</span>
+        }
+    }
+
+    /*public void desconto() {
+
+        String categoriaCliente = pedido.getCliente().getTipoCliente().getDescricao();
+        int categoriaCliDesc = pedido.getCliente().getTipoCliente().getAplicarDesconto();
+        float totalComDesc = 0;
+        float valor = 200;
+
+        if (&quot;Vip&quot;.equals(categoriaCliente)) {
+            if (calculaTotal() &gt;= valor) {
+                calculaDesconto();
+            }
+        } else if (&quot;Frequente&quot;.equals(categoriaCliente)) {
+            if (calculaTotal() &gt;= (valor * 2)) {
+                calculaDesconto();
+            }
+        } else if (&quot;Moderado&quot;.equals(categoriaCliente)) {
+            if (calculaTotal() &gt;= (valor * 3)) {
+                calculaDesconto();
+            }
+        } else if (&quot;Inciante&quot;.equals(valor * 4)) {
+            if (calculaTotal() &gt;= (valor * 3.5)) {
+                calculaDesconto();
+            }
+        } else if (calculaTotal() &gt;= (valor * 5)) {
+            totalComDesc = calculaTotal() - ((calculaTotal() * 5) / 100);
+        } else if (calculaTotal() &gt;= (valor * 6)) {
+            totalComDesc = calculaTotal() - ((calculaTotal() * 6) / 100);
+        } else if (calculaTotal() &gt;= (valor * 7)) {
+            totalComDesc = calculaTotal() - ((calculaTotal() * 7) / 100);
+        }
+
+    }*/
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

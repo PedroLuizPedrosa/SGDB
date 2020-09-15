@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ClienteDAO.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;SGDB&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">dao</a> &gt; <span class="el_source">ClienteDAO.java</span></div><h1>ClienteDAO.java</h1><pre class="source lang-java linenums">package dao;
+
+import static dao.DAO.fecharConexao;
+import javax.servlet.ServletException;
+import model.Cliente;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
+
+<span class="nc" id="L15">public class ClienteDAO {</span>
+
+    public static List&lt;Cliente&gt; obterClientes() throws ClassNotFoundException, SQLException {
+<span class="nc" id="L18">        Connection conexao = null;</span>
+<span class="nc" id="L19">        Statement comando = null;</span>
+<span class="nc" id="L20">        List&lt;Cliente&gt; clientes = new ArrayList&lt;Cliente&gt;();</span>
+<span class="nc" id="L21">        Cliente cliente = null;</span>
+        try {
+<span class="nc" id="L23">            conexao = BD.getConexao();</span>
+<span class="nc" id="L24">            comando = conexao.createStatement();</span>
+<span class="nc" id="L25">            ResultSet rs = comando.executeQuery(&quot;select * from pessoa, cliente where pessoa.codPessoa=cliente.codPessoa&quot;);</span>
+<span class="nc bnc" id="L26" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L27">                cliente = instanciarCliente(rs);</span>
+<span class="nc" id="L28">                clientes.add(cliente);</span>
+            }
+        } finally {
+<span class="nc" id="L31">            fecharConexao(conexao, comando);</span>
+<span class="nc" id="L32">        }</span>
+<span class="nc" id="L33">        return clientes;</span>
+    }
+
+    public static Cliente obterCliente(int codPessoa) throws ClassNotFoundException, SQLException {
+<span class="nc" id="L37">        Connection conexao = null;</span>
+<span class="nc" id="L38">        Statement comando = null;</span>
+<span class="nc" id="L39">        Cliente cliente = null;</span>
+        try {
+<span class="nc" id="L41">            conexao = BD.getConexao();</span>
+<span class="nc" id="L42">            comando = conexao.createStatement();</span>
+<span class="nc" id="L43">            ResultSet rs = comando.executeQuery(&quot;select * from pessoa p , cliente c where p.codPessoa = &quot; + codPessoa );</span>
+<span class="nc" id="L44">            rs.first();</span>
+<span class="nc" id="L45">            cliente = instanciarCliente(rs);</span>
+        } finally {
+<span class="nc" id="L47">            fecharConexao(conexao, comando);</span>
+<span class="nc" id="L48">        }</span>
+<span class="nc" id="L49">        return cliente;</span>
+    }
+
+    public static Cliente instanciarCliente(ResultSet rs) throws SQLException {
+<span class="nc" id="L53">        Cliente cliente = new Cliente(</span>
+<span class="nc" id="L54">                rs.getInt(&quot;codPessoa&quot;),</span>
+<span class="nc" id="L55">                rs.getString(&quot;nome&quot;),</span>
+<span class="nc" id="L56">                rs.getString(&quot;dataNasc&quot;),</span>
+<span class="nc" id="L57">                rs.getString(&quot;sexo&quot;),</span>
+<span class="nc" id="L58">                rs.getString(&quot;cpf&quot;),</span>
+<span class="nc" id="L59">                rs.getString(&quot;rg&quot;),</span>
+<span class="nc" id="L60">                rs.getString(&quot;telefone&quot;),</span>
+<span class="nc" id="L61">                rs.getString(&quot;celular&quot;),</span>
+<span class="nc" id="L62">                rs.getString(&quot;email&quot;),</span>
+<span class="nc" id="L63">                rs.getString(&quot;cep&quot;),</span>
+<span class="nc" id="L64">                rs.getString(&quot;logradouro&quot;),</span>
+<span class="nc" id="L65">                rs.getInt(&quot;numero&quot;),</span>
+<span class="nc" id="L66">                rs.getString(&quot;complemento&quot;),</span>
+<span class="nc" id="L67">                rs.getString(&quot;bairro&quot;),</span>
+<span class="nc" id="L68">                rs.getString(&quot;cidade&quot;),</span>
+<span class="nc" id="L69">                rs.getString(&quot;estado&quot;),</span>
+                null);
+<span class="nc" id="L71">            cliente.setCodTipoCliente(rs.getInt(&quot;TipoCliente_codTipoCliente&quot;));</span>
+<span class="nc" id="L72">        return cliente;</span>
+    }
+
+    public static void gravar(Cliente cliente) throws SQLException, ClassNotFoundException, ServletException {
+
+<span class="nc" id="L77">        Connection conexao = null;</span>
+<span class="nc" id="L78">        PreparedStatement comando = null;</span>
+        try {
+<span class="nc" id="L80">            conexao = BD.getConexao();</span>
+<span class="nc" id="L81">            comando = conexao.prepareStatement(&quot;insert into pessoa (codPessoa, nome, dataNasc, sexo, cpf, rg, telefone, celular, email, cep, logradouro, numero, complemento, bairro, cidade, estado) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)&quot;);</span>
+<span class="nc" id="L82">            comando.setInt(1, cliente.getCodPessoa());</span>
+<span class="nc" id="L83">            comando.setString(2, cliente.getNome());</span>
+<span class="nc" id="L84">            comando.setString(3, cliente.getDataNasc());</span>
+<span class="nc" id="L85">            comando.setString(4, cliente.getSexo());</span>
+<span class="nc" id="L86">            comando.setString(5, cliente.getCpf());</span>
+<span class="nc" id="L87">            comando.setString(6, cliente.getRg());</span>
+<span class="nc" id="L88">            comando.setString(7, cliente.getTelefone());</span>
+<span class="nc" id="L89">            comando.setString(8, cliente.getCelular());</span>
+<span class="nc" id="L90">            comando.setString(9, cliente.getEmail());</span>
+<span class="nc" id="L91">            comando.setString(10, cliente.getCep());</span>
+<span class="nc" id="L92">            comando.setString(11, cliente.getLogradouro());</span>
+<span class="nc" id="L93">            comando.setInt(12, cliente.getNumero());</span>
+<span class="nc" id="L94">            comando.setString(13, cliente.getComplemento());</span>
+<span class="nc" id="L95">            comando.setString(14, cliente.getBairro());</span>
+<span class="nc" id="L96">            comando.setString(15, cliente.getCidade());</span>
+<span class="nc" id="L97">            comando.setString(16, cliente.getEstado());</span>
+<span class="nc" id="L98">            comando.executeUpdate();</span>
+            
+<span class="nc" id="L100">            comando = conexao.prepareStatement(&quot;insert into cliente (codPessoa, TipoCliente_codTipoCliente) values (?, ?)&quot;);</span>
+<span class="nc" id="L101">            comando.setInt(1, cliente.getCodPessoa());</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">            if (cliente.getTipoCliente() == null) {</span>
+<span class="nc" id="L103">                comando.setNull(2, Types.INTEGER);</span>
+            } else {
+<span class="nc" id="L105">                comando.setInt(2, cliente.getTipoCliente().getCodTipoCliente());</span>
+            }
+<span class="nc" id="L107">            comando.executeUpdate();</span>
+        } finally {
+<span class="nc" id="L109">            fecharConexao(conexao, comando);</span>
+<span class="nc" id="L110">        }</span>
+<span class="nc" id="L111">    }</span>
+
+    public static void excluir(Cliente cliente) throws SQLException, ClassNotFoundException {
+<span class="nc" id="L114">        Connection conexao = null;</span>
+<span class="nc" id="L115">        Statement comando = null;</span>
+        String stringSQL;
+
+        try {
+<span class="nc" id="L119">            conexao = BD.getConexao();</span>
+<span class="nc" id="L120">            comando = conexao.createStatement();</span>
+<span class="nc" id="L121">            stringSQL = &quot;delete from cliente where cliente.codPessoa = &quot; + cliente.getCodPessoa();</span>
+<span class="nc" id="L122">            comando.execute(stringSQL);</span>
+<span class="nc" id="L123">            stringSQL = &quot;delete from pessoa where codPessoa = &quot; + cliente.getCodPessoa();</span>
+<span class="nc" id="L124">            comando.execute(stringSQL);</span>
+        } finally {
+<span class="nc" id="L126">            fecharConexao(conexao, comando);</span>
+<span class="nc" id="L127">        }</span>
+<span class="nc" id="L128">    }</span>
+    
+    public static void alterar(Cliente cliente) throws SQLException, ClassNotFoundException {
+
+<span class="nc" id="L132">        Connection conexao = null;</span>
+<span class="nc" id="L133">        Statement comando = null;</span>
+        String stringSQL;
+        try {
+<span class="nc" id="L136">            conexao = BD.getConexao();</span>
+<span class="nc" id="L137">            comando = conexao.createStatement();</span>
+<span class="nc" id="L138">            stringSQL = &quot;update pessoa set &quot;</span>
+<span class="nc" id="L139">                    + &quot;nome = '&quot; + cliente.getNome() + &quot;',&quot;</span>
+<span class="nc" id="L140">                    + &quot;datanasc = '&quot; + cliente.getDataNasc() + &quot;',&quot;</span>
+<span class="nc" id="L141">                    + &quot;sexo = '&quot; + cliente.getSexo() + &quot;',&quot;</span>
+<span class="nc" id="L142">                    + &quot;cpf = '&quot; + cliente.getCpf() + &quot;',&quot;</span>
+<span class="nc" id="L143">                    + &quot;rg = '&quot; + cliente.getRg() + &quot;',&quot;</span>
+<span class="nc" id="L144">                    + &quot;telefone = '&quot; + cliente.getTelefone() + &quot;',&quot;</span>
+<span class="nc" id="L145">                    + &quot;celular = '&quot; + cliente.getCelular() + &quot;',&quot;</span>
+<span class="nc" id="L146">                    + &quot;email = '&quot; + cliente.getEmail() + &quot;',&quot;</span>
+<span class="nc" id="L147">                    + &quot;cep = '&quot; + cliente.getCep() + &quot;',&quot;</span>
+<span class="nc" id="L148">                    + &quot;logradouro = '&quot; + cliente.getLogradouro() + &quot;',&quot;</span>
+<span class="nc" id="L149">                    + &quot;numero = '&quot; + cliente.getNumero() + &quot;',&quot;</span>
+<span class="nc" id="L150">                    + &quot;complemento = '&quot; + cliente.getComplemento() + &quot;',&quot;</span>
+<span class="nc" id="L151">                    + &quot;bairro = '&quot; + cliente.getBairro() + &quot;',&quot;</span>
+<span class="nc" id="L152">                    + &quot;cidade = '&quot; + cliente.getCidade() + &quot;',&quot;</span>
+<span class="nc" id="L153">                    + &quot;estado = '&quot; + cliente.getEstado() + &quot;'&quot;;</span>
+<span class="nc" id="L154">            stringSQL = stringSQL + &quot;where codPessoa = &quot; + cliente.getCodPessoa();</span>
+<span class="nc" id="L155">            comando.execute(stringSQL);</span>
+<span class="nc" id="L156">            stringSQL = &quot;update cliente set Cliente_codTipoCliente = &quot;;</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">            if (cliente.getTipoCliente() == null) {</span>
+<span class="nc" id="L158">                stringSQL = stringSQL + &quot;null&quot;;</span>
+            } else {
+<span class="nc" id="L160">                stringSQL = stringSQL + cliente.getTipoCliente().getCodTipoCliente();</span>
+            }
+<span class="nc" id="L162">            stringSQL = stringSQL + &quot; where codPessoa = &quot; + cliente.getCodPessoa();</span>
+<span class="nc" id="L163">            comando.execute(stringSQL);</span>
+        } finally {
+<span class="nc" id="L165">            fecharConexao(conexao, comando);</span>
+<span class="nc" id="L166">        }</span>
+<span class="nc" id="L167">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>
